@@ -1,6 +1,6 @@
 # THIS REPOSITORY ALLOWS NVIDIA-DRIVER CONTAINER TO RUN ON OKD 4.9
 
-You can build the image like this way
+You can build the image this way
 ```
 docker build --build-arg FEDORA_VERSION=34 --build-arg DRIVER_VERSION=550.54.15 -t 550.54.15-fedora .
 ```
