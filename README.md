@@ -71,12 +71,12 @@ spec:
   connectionConfig:
     url: https://helm.ngc.nvidia.com/nvidia
 ```
-4) Create the GPU-OPERATOR NAMESPACE:
+3) Create the GPU-OPERATOR NAMESPACE:
 
 ```
 oc create ns nvidia-gpu-operator
 ```
-5) Install the HELM CHART, changing these values:
+4) Install the HELM CHART, changing these values:
 
 ```
 plataform:
@@ -93,7 +93,7 @@ driver:
   image: fedora-coreos-34-nvidia-driver
   version: 550.54.15
 ```
-6) Create the MACHINEPOOLCONFIG (which we will use to apply the SELINUX fix):
+5) Create the MACHINEPOOLCONFIG (which we will use to apply the SELINUX fix):
 
 ```
 apiVersion: machineconfiguration.openshift.io/v1
@@ -108,7 +108,7 @@ spec:
     matchLabels:
       node-role.kubernetes.io/gpu: ""
 ```
-7) Create the MACHINECONFIG (which will enable IOMMU as NIVIDA needs it):
+6) Create the MACHINECONFIG (which will enable IOMMU as NIVIDA needs it):
 
 ```
 apiVersion: machineconfiguration.openshift.io/v1
@@ -124,7 +124,7 @@ spec:
   kernelArguments:
       - intel_iommu=on
 ```
-8) Create the MACHINESET to deploy the GPU NODES:
+7) Create the MACHINESET to deploy the GPU NODES:
 
 ```
 apiVersion: machine.openshift.io/v1beta1
@@ -180,7 +180,7 @@ spec:
             server: vcenter-okd.example.com
 ```
 
-9) Once the new node is setup, turn the VIRTUALMACHINE off and edit its settings (the settings will vary according to the GPU - you will need to check it):
+8) Once the new node is setup, turn the VIRTUALMACHINE off and edit its settings (the settings will vary according to the GPU - you will need to check it):
 
 ```
 VM Settings > VM options > Advanced > Configuration Parameters > Edit Configuration
@@ -188,17 +188,17 @@ pciPassthru.use64bitMMIO TRUE
 pciPassthru.64bitMMIOSizeGB 512
 ```
 
-10) Attach the GPU/PCI DEVICE (in our case: DYNAMIC DIRECTPATH I/O) to the VIRTUALMACHINE;
+9) Attach the GPU/PCI DEVICE (in our case: DYNAMIC DIRECTPATH I/O) to the VIRTUALMACHINE;
 * Obs.: You may need to update the HARDWARE VERSION of your VIRTUALMACHINE.
 
-11) Build the NVIDIA DRIVER IMAGE for OKD 4.9:
+10) Build the NVIDIA DRIVER IMAGE for OKD 4.9:
 
 - git clone this repo;
 - docker build --build-arg FEDORA_VERSION=34 --build-arg DRIVER_VERSION=550.54.15 -t 550.54.15-fedora .
 - docker tag 550.54.15-fedora your_docker_repo/fedora-coreos-34-nvidia-driver:550.54.15-fedora34
 - docker push your_docker_repo/fedora-coreos-34-nvidia-driver:550.54.15-fedora34
 
-12) Create a butane config to fix the SELinux bug:
+11) Create a butane config to fix the SELinux bug:
 
 - Download the butane binary:
 
@@ -253,6 +253,9 @@ butane selinux_fix_nvidia.bu --files-dir . -o 81-selinux-fix-gpu.yaml
 oc create -f 81-selinux-fix-gpu.yaml
 ```
 
-
-
+# THINGS THAT STILL NEED TO BE REVIEWED
+1) Create a new template for the GPU NODES so we don't need to manually change the VMs after it being created;
+2) The template must have UPDATED HW VERSION;
+3) We didn't change the BOOT OPTIONS to EFI as suggested in NVIDIA Docs;
+4) NVIDIA DASHBOARD doesn't work on 4.9.
 
