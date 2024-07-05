@@ -4,7 +4,7 @@ You can build the image this way
 ```
 docker build --build-arg FEDORA_VERSION=34 --build-arg DRIVER_VERSION=550.54.15 -t 550.54.15-fedora .
 ```
-In order to run this image on OKD 4.9 you will need to workaround a bug in SELinux (container-selinux package). To achieve this, we need to create a new MachineConfig overriding a module.
+In order to run this image on OKD 4.9 you will need to workaround a bug in SELinux (container-selinux package). To achieve this, we need to create a new MachineConfig to change SELinux's module.
 
 I won't cover all the steps to install GPU-OPERATOR on OKD 4.9, but, in summary that is what you will need:
 
