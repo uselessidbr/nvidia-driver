@@ -180,6 +180,8 @@ spec:
             server: vcenter-okd.example.com
 ```
 
+Obs.: ResourcePool definition must be removed in most implementations
+
 8) Once the new node is setup, turn the VIRTUALMACHINE off and edit its settings (the settings will vary according to the GPU - you will need to check it):
 
 ```
