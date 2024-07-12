@@ -274,7 +274,7 @@ devicePlugin:
       version: v1
       sharing:
         timeSlicing:
-          renameByDefault: true
+          renameByDefault: false
           resources:
             - name: nvidia.com/gpu
               replicas: 8
