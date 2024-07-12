@@ -145,6 +145,7 @@ spec:
   template:
     metadata:
       labels:
+        nvidia.com/device-plugin.config: tesla-t4
         machine.openshift.io/cluster-api-cluster: okd4-13v1c
         machine.openshift.io/cluster-api-machine-role: worker
         machine.openshift.io/cluster-api-machine-type: worker
@@ -269,8 +270,14 @@ devicePlugin:
   config:
     create: true
     data:
-      Tesla-T4: "version: v1\nsharing:\n  timeSlicing:\n    resources:\n      - name:
-        nvidia.com/gpu\n        replicas: 8 "
+      Tesla-T4:
+      version: v1
+      sharing:
+        timeSlicing:
+          renameByDefault: true
+          resources:
+            - name: nvidia.com/gpu
+              replicas: 8
     default: "Tesla-T4"
     name: device-plugin-config
   enabled: true
