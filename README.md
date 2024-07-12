@@ -285,6 +285,8 @@ devicePlugin:
 ```
 Obs.: In our case we have Tesla T4 GPU, you will have to change it according to your GPU. Also, it doesn't support MIG (Multi-instance GPU), if your GPU supports it you rather use it instead of "time-slicing" method.
 
+INFO: The argument "failRequestsGreaterThanOne=true" won't allow one pod to request more than 1 GPU.
+
 # THINGS THAT STILL NEED TO BE REVIEWED
 1) Create a new template for the GPU NODES so we don't need to manually change the VMs after it being created;
 2) The template must have UPDATED HW VERSION;
