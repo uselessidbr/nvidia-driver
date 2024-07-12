@@ -145,7 +145,7 @@ spec:
   template:
     metadata:
       labels:
-        nvidia.com/device-plugin.config: tesla-t4
+        nvidia.com/device-plugin.config: Tesla-T4
         machine.openshift.io/cluster-api-cluster: okd4-13v1c
         machine.openshift.io/cluster-api-machine-role: worker
         machine.openshift.io/cluster-api-machine-type: worker
