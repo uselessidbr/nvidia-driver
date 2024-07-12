@@ -259,6 +259,24 @@ butane selinux_fix_nvidia.bu --files-dir . -o 81-selinux-fix-gpu.yaml
 oc create -f 81-selinux-fix-gpu.yaml
 ```
 
+12) Configure the GPU Time-Slicing to share a GPU resource between multiple pods
+
+- Update the "gpu-operator" helm and change the "devicePlugin" section to this:
+
+```
+devicePlugin:
+  args: []
+  config:
+    create: true
+    data:
+      Tesla-T4: "version: v1\nsharing:\n  timeSlicing:\n    resources:\n      - name:
+        nvidia.com/gpu\n        replicas: 8 "
+    default: "Tesla-T4"
+    name: device-plugin-config
+  enabled: true
+```
+Obs.: In our case we have Tesla T4 GPU, you will have to change it according to your GPU. Also, it doesn't support MIG (Multi-instance GPU), if your GPU supports it you rather use it instead of "time-slicing" method.
+
 # THINGS THAT STILL NEED TO BE REVIEWED
 1) Create a new template for the GPU NODES so we don't need to manually change the VMs after it being created;
 2) The template must have UPDATED HW VERSION;
