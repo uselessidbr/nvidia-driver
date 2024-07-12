@@ -274,6 +274,7 @@ devicePlugin:
       version: v1
       sharing:
         timeSlicing:
+          failRequestsGreaterThanOne: true
           renameByDefault: false
           resources:
             - name: nvidia.com/gpu
