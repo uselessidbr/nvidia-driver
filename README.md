@@ -152,6 +152,10 @@ spec:
         node-role.kubernetes.io/stage: "true" 
         node-role.kubernetes.io/gpu: ""
     spec:
+      tolerations:
+      - key: nvidia.com/gpu
+        operator: Exists
+        effect: NoSchedule
       metadata:
         labels:
           node-role.kubernetes.io/gpu: ""
