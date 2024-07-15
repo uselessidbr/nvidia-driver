@@ -309,7 +309,7 @@ spec:
 ```
 - Enable the plugin by running the following command:
 
-```oc patch consoles.operator.openshift.io cluster --patch '[{"op": "add", "path": "/spec/plugins/-", "value": "console-plugin-nvidia-gpu" }]' --type=json```
+```oc patch clusterpolicies.nvidia.com cluster-policy --patch '{ "spec": { "dcgmExporter": { "config": { "name": "console-plugin-nvidia-gpu" } } } }' --type=merge```
 
 - Verify the plugins field is specified:
 
