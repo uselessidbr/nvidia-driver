@@ -347,6 +347,6 @@ If it is specified, then run the following to enable the plugin:
 1) Create a new template for the GPU NODES so we don't need to manually change the VMs after it being created;
 2) The template must have UPDATED HW VERSION;
 3) We didn't change the BOOT OPTIONS to EFI as suggested in NVIDIA Docs;
-4) NVIDIA DASHBOARD doesn't work on 4.9;
+4) NVIDIA DASHBOARD doesn't work properly on 4.9;
 5) GPU's NODES autoscaling.
 
