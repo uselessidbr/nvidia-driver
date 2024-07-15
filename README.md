@@ -287,6 +287,62 @@ Obs.: In our case we have Tesla T4 GPU, you will have to change it according to 
 
 INFO: The argument "failRequestsGreaterThanOne=true" won't allow one pod to request more than 1 GPU.
 
+13) Enable NVIDIA Dashboard
+
+- Install the HELM CHART on OKD:
+
+```
+apiVersion: helm.openshift.io/v1beta1
+kind: HelmChartRepository
+metadata:
+  name: console-plugin-nvidia-gpu
+spec:
+  connectionConfig:
+    url: https://rh-ecosystem-edge.github.io/console-plugin-nvidia-gpu
+```
+
+- Include "tag" and "version" to the HELM values and install it:
+
+```
+  tag: release-0.0.1
+  version: release-0.0.1
+```
+- Enable the plugin by running the following command:
+
+```oc patch consoles.operator.openshift.io cluster --patch '[{"op": "add", "path": "/spec/plugins/-", "value": "console-plugin-nvidia-gpu" }]' --type=json```
+
+- Verify the plugins field is specified:
+
+```oc get consoles.operator.openshift.io cluster --output=jsonpath="{.spec.plugins}"``` 
+
+If it is not specified, then run the following to enable the plugin:
+
+```oc patch consoles.operator.openshift.io cluster --patch '{ "spec": { "plugins": ["console-plugin-nvidia-gpu"] } }' --type=merge```
+
+If it is specified, then run the following to enable the plugin:
+
+```oc patch consoles.operator.openshift.io cluster --patch '[{"op": "add", "path": "/spec/plugins/-", "value": "console-plugin-nvidia-gpu" }]' --type=json```
+
+- Download the latest NVIDIA DCGM Exporter Dashboard from the DCGM Exporter repository on GitHub:
+
+```curl -LfO https://github.com/NVIDIA/dcgm-exporter/raw/main/grafana/dcgm-exporter-dashboard.json``` 
+
+- Create a config map from the downloaded file in the openshift-config-managed namespace:
+
+```oc create configmap nvidia-dcgm-exporter-dashboard -n openshift-config-managed --from-file=dcgm-exporter-dashboard.json```
+
+- Label the config map to expose the dashboard in the Administrator perspective of the web console:
+
+```oc label configmap nvidia-dcgm-exporter-dashboard -n openshift-config-managed "console.openshift.io/dashboard=true"```
+
+- Optional: Label the config map to expose the dashboard in the Developer perspecitive of the web console:
+
+```oc label configmap nvidia-dcgm-exporter-dashboard -n openshift-config-managed "console.openshift.io/odc-dashboard=true"```
+
+- View the created resource and verify the labels:
+
+```oc -n openshift-config-managed get cm nvidia-dcgm-exporter-dashboard --show-labels```
+
 # THINGS THAT STILL NEED TO BE REVIEWED
 1) Create a new template for the GPU NODES so we don't need to manually change the VMs after it being created;
 2) The template must have UPDATED HW VERSION;
