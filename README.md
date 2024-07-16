@@ -304,8 +304,7 @@ spec:
 - Include "tag" and "version" to the HELM values and install it:
 
 ```
-  tag: release-0.0.1
-  version: release-0.0.1
+  version: 0.0.1
 ```
 - Enable the plugin by running the following command:
 
