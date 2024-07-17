@@ -92,7 +92,18 @@ driver:
   repository: docker.io/gvoliveira
   image: fedora-coreos-34-nvidia-driver
   version: 550.54.15
+…
+  manager:
+     - name: ENABLE_GPU_POD_EVICTION
+        value: "true"
+      - name: DRAIN_DELETE_EMPTYDIR_DATA
+        value: "false"
+…
+ upgradePolicy:
+    autoUpgrade: false
 ```
+Obs.: Had to disable ```autoUpgrade``` cause it was avoiding GPU's pods deletion which causes the nvidia-driver pod to get stuck (CrashLoopBackOff) on restarts because it won't be able to uninstall/unload the driver. Due to a known bug, the driver reinstall is triggered at every pod restart.
+
 5) Create the MACHINEPOOLCONFIG (which we will use to apply the SELINUX fix):
 
 ```
